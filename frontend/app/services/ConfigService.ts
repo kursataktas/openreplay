@@ -19,4 +19,9 @@ export default class ConfigService extends BaseService {
     return this.client.get('/boarding')
       .then(r => r.json()).then(j => j.data)
   }
+
+  async checkElasticConnection(params: any): Promise<any> {
+    return this.client.post('/integrations/elasticsearch/test', params)
+      .then(r => r.json()).then(j => j.data)
+  }
 }
