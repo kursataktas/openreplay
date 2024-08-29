@@ -67,6 +67,7 @@ export const CLIENT_TABS = {
   SITES: 'projects',
   CUSTOM_FIELDS: 'metadata',
   WEBHOOKS: 'webhooks',
+  CUSTOM_EVENTS: 'custom-events',
   NOTIFICATIONS: 'notifications',
   AUDIT: 'audit',
   BILLING: 'billing',

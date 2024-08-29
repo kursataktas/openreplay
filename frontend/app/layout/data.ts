@@ -26,6 +26,7 @@ export const enum PREFERENCES_MENU {
   INTEGRATIONS = 'integrations',
   METADATA = 'metadata',
   WEBHOOKS = 'webhooks',
+  CUSTOM_EVENTS = 'custom-events',
   MODULES = 'modules',
   PROJECTS = 'projects',
   ROLES_ACCESS = 'roles-access',
@@ -134,6 +135,7 @@ export const preferences: Category[] = [
       { label: 'Integrations', key: PREFERENCES_MENU.INTEGRATIONS, icon: 'plug' },
       { label: 'Metadata', key: PREFERENCES_MENU.METADATA, icon: 'tags' },
       { label: 'Webhooks', key: PREFERENCES_MENU.WEBHOOKS, icon: 'link-45deg' },
+      { label: 'Custom Events', key: PREFERENCES_MENU.CUSTOM_EVENTS, icon: 'calendar' },
       { label: 'Modules', key: PREFERENCES_MENU.MODULES, icon: 'puzzle' },
       { label: 'Projects', key: PREFERENCES_MENU.PROJECTS, icon: 'folder2' },
       {

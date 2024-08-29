@@ -14,6 +14,7 @@ import Notifications from './Notifications';
 import Roles from './Roles';
 import SessionsListingSettings from 'Components/Client/SessionsListingSettings';
 import Modules from 'Components/Client/Modules';
+import CustomEventsList from 'Components/Client/CustomEvents/CustomEventsList';
 
 @withRouter
 export default class Client extends React.PureComponent {
@@ -38,6 +39,7 @@ export default class Client extends React.PureComponent {
       <Route exact strict path={clientRoute(CLIENT_TABS.MANAGE_ROLES)} component={Roles} />
       <Route exact strict path={clientRoute(CLIENT_TABS.AUDIT)} component={AuditView} />
       <Route exact strict path={clientRoute(CLIENT_TABS.MODULES)} component={Modules} />
+      <Route exact strict path={clientRoute(CLIENT_TABS.CUSTOM_EVENTS)} component={CustomEventsList} />
       <Redirect to={clientRoute(CLIENT_TABS.PROFILE)} />
     </Switch>
   );
