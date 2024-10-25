@@ -5,56 +5,56 @@ export function resolveURL(baseURL: string, relURL: string): string {
   return new URL(relURL, baseURL).toString();
 }
 
-// url("url") or url('url') or url(url)
-const re1 = /url\(("[^"]*"|'[^']*'|[^)]*)\)/g
-// @import "url" or @import 'url'
-const re2 = /@import (["'])(.*?)\1/g
+const re1 = /url\(("[^"]*"|'[^']*'|[^)]*)\)/g;
+const re2 = /@import\s+(['"])(.*?)\1/g;
+
 function cssUrlsIndex(css: string): Array<[number, number]> {
   const idxs: Array<[number, number]> = [];
   const i1 = css.matchAll(re1);
-  // @ts-ignore
   for (let m of i1) {
-    // @ts-ignore
-    const s: number = m.index + m[0].indexOf(m[1]);
-    const e: number = s + m[1].length;
+    const s = m.index + m[0].indexOf(m[1]);
+    const e = s + m[1].length;
     idxs.push([s, e]);
   }
   const i2 = css.matchAll(re2);
-  // @ts-ignore
   for (let m of i2) {
-    // @ts-ignore
-    const s = m.index + m[0].indexOf(m[1]);
-    const e = s + m[1].length;
-    idxs.push([s, e])
+    const s = m.index + m[0].indexOf(m[2]);
+    const e = s + m[2].length;
+    idxs.push([s, e]);
   }
-  return idxs.reverse()
+  return idxs.reverse();
 }
+
 function unquote(str: string): [string, string] {
-  if (str.length <= 2) {
-    return [str, ""]
+  const firstChar = str[0];
+  const lastChar = str[str.length - 1];
+  if (firstChar === lastChar && (firstChar === '"' || firstChar === "'")) {
+    return [str.substring(1, str.length - 1), firstChar];
+  } else {
+    return [str, ''];
   }
-  if (str[0] == '"' && str[str.length-1] == '"') {
-    return [ str.substring(1, str.length-1), "\""];
-  }
-  if (str[0] == '\'' && str[str.length-1] == '\'') {
-    return [ str.substring(1, str.length-1), "'" ];
-  }
-  return [str, ""]
 }
+
 function rewriteCSSLinks(css: string, rewriter: (rawurl: string) => string): string {
-  for (let idx of cssUrlsIndex(css)) {
-    const f = idx[0]
-    const t = idx[1]
-    const [ rawurl, q ] = unquote(css.substring(f, t));
-    css = css.substring(0,f) + q + rewriter(rawurl) + q + css.substring(t);
-  }
-  return css
+  css = css.replace(/url\(([^)]*)\)/g, (match, p1) => {
+    let [rawurl, q] = unquote(p1.trim());
+    let newurl = rewriter(rawurl);
+    return `url(${q}${newurl}${q})`;
+  });
+
+  css = css.replace(/@import\s+(['"])(.*?)\1/g, (match, quote, url) => {
+    let newurl = rewriter(url);
+    return `@import ${quote}${newurl}${quote}`
+  });
+
+  const hasSemi = css.endsWith(';');
+  return hasSemi ? css : css + ';';
 }
 
 function rewritePseudoclasses(css: string): string {
   return css
     .replace(/:hover/g, ".-openreplay-hover")
-    .replace(/:focus/g, ".-openreplay-focus")
+    .replace(/:focus/g, ".-openreplay-focus");
 }
 
 export function resolveCSS(baseURL: string, css: string): string {
