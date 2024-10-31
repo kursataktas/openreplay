@@ -9,8 +9,8 @@ function LiveSessionSearch() {
   const { projectsStore, searchStoreLive, sessionStore } = useStore();
   const saveRequestPayloads = projectsStore.active?.saveRequestPayloads;
   const appliedFilter = searchStoreLive.instance;
-  const hasEvents = appliedFilter.filters.filter(i => i.isEvent).length > 0;
-  const hasFilters = appliedFilter.filters.filter(i => !i.isEvent).length > 0;
+  const hasEvents = appliedFilter.filters.filter((i) => i.isEvent).length > 0;
+  const hasFilters = appliedFilter.filters.filter((i) => !i.isEvent).length > 0;
 
   useEffect(() => {
     searchStoreLive.fetchSessions();
@@ -31,7 +31,7 @@ function LiveSessionSearch() {
     });
 
     searchStoreLive.edit({
-      filters: newFilters
+      filters: newFilters,
     });
 
     sessionStore.fetchLiveSessions();
@@ -39,47 +39,23 @@ function LiveSessionSearch() {
 
   const onChangeEventsOrder = (e, { name, value }) => {
     searchStoreLive.edit({
-      eventsOrder: value
+      eventsOrder: value,
     });
 
     sessionStore.fetchLiveSessions();
   };
 
-  return (hasEvents || hasFilters) ? (
-    <div className="border bg-white rounded mt-4">
-      <div className="p-5">
-        <FilterList
-          filter={appliedFilter}
-          onUpdateFilter={onUpdateFilter}
-          onRemoveFilter={onRemoveFilter}
-          onChangeEventsOrder={onChangeEventsOrder}
-          saveRequestPayloads={saveRequestPayloads}
-        />
-      </div>
-
-      <div className="border-t px-5 py-1 flex items-center -mx-2">
-        <div>
-          <FilterSelection
-            filter={undefined}
-            onFilterClick={onAddFilter}
-          >
-            {/* <IconButton primaryText label="ADD STEP" icon="plus" /> */}
-            <Button
-              variant="text-primary"
-              className="mr-2"
-              // onClick={() => setshowModal(true)}
-              icon="plus">
-              ADD STEP
-            </Button>
-          </FilterSelection>
-        </div>
-        <div className="ml-auto flex items-center">
-          {/* <SaveFunnelButton /> */}
-          {/* <SaveFilterButton /> */}
-        </div>
-      </div>
-    </div>
-  ) : <></>;
+  return (
+    <FilterList
+      filter={appliedFilter}
+      onAddFilter={onAddFilter}
+      onUpdateFilter={onUpdateFilter}
+      onRemoveFilter={onRemoveFilter}
+      onChangeEventsOrder={onChangeEventsOrder}
+      saveRequestPayloads={saveRequestPayloads}
+      onlyFilters={true}
+    />
+  );
 }
 
 export default observer(LiveSessionSearch);
